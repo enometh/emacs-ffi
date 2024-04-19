@@ -2,7 +2,12 @@
 
 (require 'cl-macs)
 
-(module-load "ffi-module.so")
+;;madhu 240419 - module-load expands to dlopen() which requires a full
+;; path unless the file is in LD_LIBRARY_PATH at program start time.
+(let ((default-directory (or (and load-file-name
+				  (file-name-directory load-file-name))
+			     default-directory)))
+  (module-load (expand-file-name  "ffi-module.so")))
 
 (gv-define-simple-setter ffi--mem-ref ffi--mem-set t)
 
