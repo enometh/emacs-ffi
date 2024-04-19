@@ -3,7 +3,7 @@ EMACS_BUILDDIR = /home/tromey/Emacs/emacs
 
 LDFLAGS = -shared
 LIBS = -lffi -lltdl
-CFLAGS += -g3 -Og -finline-small-functions -shared -fPIC -I$(EMACS_BUILDDIR)/src/ -I$(EMACS_BUILDDIR)/lib/
+override CFLAGS += -g3 -Og -finline-small-functions -shared -fPIC -I$(EMACS_BUILDDIR)/src/
 
 # Set this to debug make check.
 #GDB = gdb --args
