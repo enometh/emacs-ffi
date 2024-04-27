@@ -166,4 +166,12 @@ SLOT-NAME is a symbol and TYPE is an FFI type descriptor."
 			 arg-types)
 	     arg-params))))
 
+(defun undefine-ffi-library (name)
+  (let ((ptr (funcall name)))
+    (when (and (user-ptrp ptr) (not (ffi-pointer-null-p ptr)))
+      (let ((ret (ffi-funcall "lt_dlclose" :pointer ptr :int)))
+	(if (zerop ret)
+	    (fset name nil))
+	ret))))
+
 (provide 'ffi)
