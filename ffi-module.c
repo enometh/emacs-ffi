@@ -171,7 +171,10 @@ ffi_dlopen (emacs_env *env, ptrdiff_t nargs, emacs_value args[], void *ignore)
   if (!name)
     return NULL;
 
-  handle = lt_dlopenext (name);
+  if (*name == 0)
+    handle = lt_dlopen(0);
+  else
+    handle = lt_dlopenext (name);
   free (name);
 
   if (!handle)
