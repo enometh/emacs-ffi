@@ -60,7 +60,7 @@ struct type_descriptor
   emacs_value value;
 };
 
-static struct type_descriptor type_descriptors[] =
+static struct type_descriptor type_descriptors_pristine[] =
 {
   { ":void", &ffi_type_void },
   { ":int8", &ffi_type_sint8 },
@@ -92,6 +92,8 @@ static struct type_descriptor type_descriptors[] =
   { ":longlong", NULL },
   { ":ulonglong", NULL }
 };
+
+static struct type_descriptor type_descriptors[ARRAY_SIZE(type_descriptors_pristine)];
 
 // Hacks to make INIT_TYPE_ALIAS work ok.
 typedef long long longlong;
@@ -1004,6 +1006,8 @@ emacs_module_init (struct emacs_runtime *runtime)
   emacs_env *env = runtime->get_environment (runtime);
 
   lt_dlinit ();
+
+  memcpy (type_descriptors, type_descriptors_pristine, sizeof(type_descriptors_pristine));
 
   INIT_TYPE_ALIAS (size_t);
   INIT_TYPE_ALIAS (ssize_t);
