@@ -144,4 +144,26 @@ SLOT-NAME is a symbol and TYPE is an FFI type descriptor."
 	     ,@body))
       `(with-ffi-string ,first-binding ,@body))))
 
+;; a ltdl handle to the running binary.
+(define-ffi-library ffi-self "")
+
+(cl-defun ffi-funcall (c-name &rest args-and-types)
+  "ARGS-AND-TYPES ::= { ARG-TYPE ARG-PARAM }* [RETURN-TYPE]."
+  (cl-flet ((parse-args-and-types (args)
+	      (let (arg-types arg-params return-type (i 0))
+		(mapc (lambda (arg)
+			(cond ((cl-evenp i) (push arg arg-types))
+			      (t (push arg arg-params)))
+			(cl-incf i))
+		      args)
+		(setq return-type (if (cl-oddp i) (pop arg-types) :void))
+		(cl-values (nreverse arg-types) (nreverse arg-params)
+			   return-type))))
+    (cl-multiple-value-bind (arg-types arg-params return-type)
+	(parse-args-and-types args-and-types)
+      (apply (ffi-lambda (ffi--dlsym c-name (ffi-self))
+			 return-type
+			 arg-types)
+	     arg-params))))
+
 (provide 'ffi)
