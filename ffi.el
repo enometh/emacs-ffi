@@ -177,4 +177,14 @@ SLOT-NAME is a symbol and TYPE is an FFI type descriptor."
 (cl-defun ffi-dlsym (string &optional (handler (ffi-self)))
   (ffi--dlsym string handler))
 
+(cl-defun ffi-mem-ref (ptr type &optional (offset 0))
+  (ffi--mem-ref (ffi-pointer+ ptr offset) type))
+
+(cl-defun ffi-mem-aref (ptr type &optional (index 0))
+  (ffi--mem-ref (ffi-pointer+ ptr (* index (ffi--type-alignment type)))
+		type))
+
+(cl-defun ffi-mem-aptr (ptr type &optional (index 0))
+  (ffi-pointer+ ptr (* index (ffi--type-alignment type))))
+
 (provide 'ffi)
