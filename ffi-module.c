@@ -637,7 +637,7 @@ static emacs_value
 module_ffi_make_pointer (emacs_env *env, ptrdiff_t nargs, emacs_value args[], void *data)
 {
   unsigned long addr = env->extract_integer (env, args[0]);
-  return env->make_user_ptr (env, NULL, (void *) addr);
+  return env->make_user_ptr (env, null_finalizer, (void *) addr);
 }
 
 /* (ffi-get-c-string POINTER) */
