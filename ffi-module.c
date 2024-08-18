@@ -640,6 +640,13 @@ module_ffi_make_pointer (emacs_env *env, ptrdiff_t nargs, emacs_value args[], vo
   return env->make_user_ptr (env, null_finalizer, (void *) addr);
 }
 
+/* (ffi-this-of) */
+static emacs_value
+module_ffi_this_of (emacs_env *env, ptrdiff_t nargs, emacs_value args[], void *data)
+{
+  return env->make_user_ptr (env, null_finalizer, (void *) *((unsigned long *) args[0]));
+}
+
 /* (ffi-get-c-string POINTER) */
 static emacs_value
 module_ffi_get_c_string (emacs_env *env, ptrdiff_t nargs, emacs_value *args,
@@ -962,6 +969,7 @@ Create a `call interface' object that can be passed to `ffi--call'."},
   { "ffi-null-lthandle", 0, 0, module_ffi_null_lthandle },
   { "ffi-make-pointer", 1, 1, module_ffi_make_pointer },
   { "ffi-pointer-address", 1, 1, module_ffi_pointer_address },
+  { "ffi-this-of", 1, 1, module_ffi_this_of },
   { "ffi-get-c-string", 1, 1, module_ffi_get_c_string },
   { "ffi-make-c-string", 1, 1, module_ffi_make_c_string },
   { "ffi-allocate", 1, 1, module_ffi_allocate },
