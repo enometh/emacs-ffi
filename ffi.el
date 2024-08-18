@@ -174,4 +174,7 @@ SLOT-NAME is a symbol and TYPE is an FFI type descriptor."
 	    (fset name nil))
 	ret))))
 
+(cl-defun ffi-dlsym (string &optional (handler (ffi-self)))
+  (ffi--dlsym string handler))
+
 (provide 'ffi)
